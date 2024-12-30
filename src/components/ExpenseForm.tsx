@@ -112,7 +112,7 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
           </SelectContent>
         </Select>
       </div>
-      <Button type="submit" className="w-full bg-[#9b87f5] hover:bg-[#7E69AB] text-white">
+      <Button type="submit" className="w-full bg-[#D3E4FD] hover:bg-[#8E9196] text-[#403E43] hover:text-white">
         Add Expense
       </Button>
     </form>

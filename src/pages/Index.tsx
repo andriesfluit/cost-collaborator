@@ -39,7 +39,7 @@ const Index = () => {
             <h2 className="text-xl md:text-2xl font-semibold text-[#403E43]">
               Expense History
             </h2>
-            <div className="text-lg font-semibold text-[#9b87f5]">
+            <div className="text-lg font-semibold text-[#8E9196]">
               Total: {totalExpenses.toLocaleString('de-DE', {
                 style: 'currency',
                 currency: 'EUR'

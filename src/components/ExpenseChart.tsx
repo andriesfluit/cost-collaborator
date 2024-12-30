@@ -5,7 +5,7 @@ type ExpenseChartProps = {
   expenses: Expense[];
 };
 
-const COLORS = ['#9b87f5', '#7E69AB', '#D6BCFA', '#E5DEFF', '#D3E4FD', '#F2FCE2'];
+const COLORS = ['#D3E4FD', '#8E9196', '#F2FCE2', '#FEF7CD', '#FDE1D3', '#E5DEFF'];
 
 export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   const categoryTotals = expenses.reduce((acc, expense) => {
