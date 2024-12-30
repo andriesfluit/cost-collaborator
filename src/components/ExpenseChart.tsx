@@ -1,11 +1,8 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import type { Expense } from './ExpenseForm';
 
 type ExpenseChartProps = {
   expenses: Expense[];
 };
-
-const COLORS = ['#D3E4FD', '#8E9196'];
 
 export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   const payerTotals = expenses.reduce((acc, expense) => {
@@ -13,39 +10,23 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
     return acc;
   }, {} as Record<string, number>);
 
-  const data = Object.entries(payerTotals).map(([name, value]) => ({
-    name,
-    value
-  }));
+  const formatAmount = (amount: number) => {
+    return amount.toLocaleString('de-DE', {
+      style: 'currency',
+      currency: 'EUR'
+    });
+  };
 
   return (
-    <div className="h-[300px] w-full bg-white rounded-xl shadow-sm p-6">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip 
-            formatter={(value: number) => 
-              value.toLocaleString('de-DE', {
-                style: 'currency',
-                currency: 'EUR'
-              })
-            }
-          />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+    <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+      <div className="space-y-3">
+        {Object.entries(payerTotals).map(([payer, amount]) => (
+          <div key={payer} className="flex justify-between items-center">
+            <span className="text-sm font-medium">{payer} paid:</span>
+            <span className="font-semibold">{formatAmount(amount)}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
