@@ -19,7 +19,6 @@ export type Expense = {
   date: string;
   amount: number;
   description: string;
-  category: string;
   payer: Payer;
   splitType: SplitType;
 };
@@ -27,15 +26,6 @@ export type Expense = {
 type ExpenseFormProps = {
   onAddExpense: (expense: Expense) => void;
 };
-
-const categories = [
-  "Food",
-  "Transport",
-  "Entertainment",
-  "Bills",
-  "Shopping",
-  "Other"
-];
 
 const splitTypes = [
   { value: 'restaurant', label: 'Restaurant (50/50)' },
@@ -52,14 +42,13 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
   const [payer, setPayer] = useState<Payer | ''>('');
   const [splitType, setSplitType] = useState<SplitType | ''>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !category || !payer || !splitType) {
+    if (!amount || !description || !payer || !splitType) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -69,7 +58,6 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
       date,
       amount: parseFloat(amount),
       description,
-      category,
       payer,
       splitType
     };
@@ -77,7 +65,6 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
     onAddExpense(expense);
     setAmount('');
     setDescription('');
-    setCategory('');
     setPayer('');
     setSplitType('');
     toast.success("Expense added successfully");
@@ -121,23 +108,8 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="category" className="text-sm font-medium text-gray-700">Category</Label>
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((cat) => (
-                <SelectItem key={cat} value={cat}>
-                  {cat}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
           <Label htmlFor="payer" className="text-sm font-medium text-gray-700">Paid by</Label>
-          <Select value={payer} onValueChange={setPayer}>
+          <Select value={payer} onValueChange={(value: Payer) => setPayer(value)}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select payer" />
             </SelectTrigger>
@@ -150,21 +122,21 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
             </SelectContent>
           </Select>
         </div>
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="splitType" className="text-sm font-medium text-gray-700">Split Type</Label>
-        <Select value={splitType} onValueChange={setSplitType}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select split type" />
-          </SelectTrigger>
-          <SelectContent>
-            {splitTypes.map(({ value, label }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <Label htmlFor="splitType" className="text-sm font-medium text-gray-700">Split Type</Label>
+          <Select value={splitType} onValueChange={(value: SplitType) => setSplitType(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select split type" />
+            </SelectTrigger>
+            <SelectContent>
+              {splitTypes.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <Button type="submit" className="w-full bg-[#D3E4FD] hover:bg-[#8E9196] text-[#403E43] hover:text-white">
         Add Expense

@@ -5,15 +5,15 @@ type ExpenseChartProps = {
   expenses: Expense[];
 };
 
-const COLORS = ['#D3E4FD', '#8E9196', '#F2FCE2', '#FEF7CD', '#FDE1D3', '#E5DEFF'];
+const COLORS = ['#D3E4FD', '#8E9196'];
 
 export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
-  const categoryTotals = expenses.reduce((acc, expense) => {
-    acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
+  const payerTotals = expenses.reduce((acc, expense) => {
+    acc[expense.payer] = (acc[expense.payer] || 0) + expense.amount;
     return acc;
   }, {} as Record<string, number>);
 
-  const data = Object.entries(categoryTotals).map(([name, value]) => ({
+  const data = Object.entries(payerTotals).map(([name, value]) => ({
     name,
     value
   }));

@@ -80,11 +80,6 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
                 </Button>
               </TableHead>
               <TableHead>
-                <Button variant="ghost" onClick={() => toggleSort('category')} className="text-xs md:text-sm">
-                  Category <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
-                </Button>
-              </TableHead>
-              <TableHead>
                 <Button variant="ghost" onClick={() => toggleSort('payer')} className="text-xs md:text-sm">
                   Paid By <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
                 </Button>
@@ -102,7 +97,6 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
                 <TableCell className="text-xs md:text-sm">{formatDate(expense.date)}</TableCell>
                 <TableCell className="text-xs md:text-sm font-medium">{formatAmount(expense.amount)}</TableCell>
                 <TableCell className="hidden md:table-cell text-xs md:text-sm">{expense.description}</TableCell>
-                <TableCell className="text-xs md:text-sm">{expense.category}</TableCell>
                 <TableCell className="text-xs md:text-sm">{expense.payer}</TableCell>
                 <TableCell className="text-xs md:text-sm">{getSplitLabel(expense.splitType)}</TableCell>
               </TableRow>
