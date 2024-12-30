@@ -34,12 +34,13 @@ const Index = () => {
   });
 
   const addExpenseMutation = useMutation({
-    mutationFn: async (expense: Omit<Expense, 'id'>) => {
+    mutationFn: async (expense: Omit<Expense, 'id' | 'created_at' | 'user_id' | 'split_ratio_a' | 'split_ratio_s'>) => {
+      const user = await supabase.auth.getUser();
       const { data, error } = await supabase
         .from('expenses')
         .insert([{
           ...expense,
-          user_id: (await supabase.auth.getUser()).data.user?.id
+          user_id: user.data.user?.id,
         }])
         .select()
         .single();
@@ -49,9 +50,11 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
+      toast.success("Expense added successfully");
     },
     onError: (error) => {
-      toast.error("Failed to add expense: " + error.message);
+      console.error('Error adding expense:', error);
+      toast.error("Failed to add expense");
     }
   });
 
