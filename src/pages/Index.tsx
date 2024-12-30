@@ -1,13 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ExpenseForm, type Expense } from '@/components/ExpenseForm';
 import { ExpenseList } from '@/components/ExpenseList';
 import { ExpenseChart } from '@/components/ExpenseChart';
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is authenticated
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        navigate("/login");
+      }
+    });
+  }, [navigate]);
 
   const handleAddExpense = (expense: Expense) => {
     setExpenses([...expenses, expense]);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
   };
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -15,9 +33,18 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#FAFBFD] py-4 px-4 md:py-8">
       <div className="container mx-auto max-w-6xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#403E43] mb-6 md:mb-8 text-center">
-          Expense Tracker
-        </h1>
+        <div className="flex justify-between items-center mb-6 md:mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#403E43]">
+            Expense Tracker
+          </h1>
+          <Button 
+            variant="outline" 
+            onClick={handleLogout}
+            className="text-[#403E43]"
+          >
+            Logout
+          </Button>
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div className="space-y-4">
