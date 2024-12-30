@@ -29,7 +29,7 @@ const Index = () => {
         .order('date', { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as Expense[];
     }
   });
 

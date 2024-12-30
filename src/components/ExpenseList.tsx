@@ -25,8 +25,8 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
       return sortDirection === 'asc' ? a.amount - b.amount : b.amount - a.amount;
     }
     return sortDirection === 'asc' 
-      ? a[sortField].localeCompare(b[sortField])
-      : b[sortField].localeCompare(a[sortField]);
+      ? String(a[sortField]).localeCompare(String(b[sortField]))
+      : String(b[sortField]).localeCompare(String(a[sortField]));
   });
 
   const toggleSort = (field: keyof Expense) => {
@@ -85,7 +85,7 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
                 </Button>
               </TableHead>
               <TableHead>
-                <Button variant="ghost" onClick={() => toggleSort('splitType')} className="text-xs md:text-sm">
+                <Button variant="ghost" onClick={() => toggleSort('split_type')} className="text-xs md:text-sm">
                   Split <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </TableHead>
@@ -98,7 +98,7 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
                 <TableCell className="text-xs md:text-sm font-medium">{formatAmount(expense.amount)}</TableCell>
                 <TableCell className="hidden md:table-cell text-xs md:text-sm">{expense.description}</TableCell>
                 <TableCell className="text-xs md:text-sm">{expense.payer}</TableCell>
-                <TableCell className="text-xs md:text-sm">{getSplitLabel(expense.splitType)}</TableCell>
+                <TableCell className="text-xs md:text-sm">{getSplitLabel(expense.split_type)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

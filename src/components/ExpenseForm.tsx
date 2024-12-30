@@ -20,7 +20,11 @@ export type Expense = {
   amount: number;
   description: string;
   payer: Payer;
-  splitType: SplitType;
+  split_type: SplitType; // Changed from splitType to split_type to match DB
+  user_id?: string;
+  created_at?: string;
+  split_ratio_a?: number;
+  split_ratio_s?: number;
 };
 
 type ExpenseFormProps = {
@@ -43,12 +47,12 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [payer, setPayer] = useState<Payer | ''>('');
-  const [splitType, setSplitType] = useState<SplitType | ''>('');
+  const [split_type, setSplitType] = useState<SplitType | ''>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !payer || !splitType) {
+    if (!amount || !description || !payer || !split_type) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -59,7 +63,7 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
       amount: parseFloat(amount),
       description,
       payer,
-      splitType
+      split_type // Changed from splitType to split_type
     };
 
     onAddExpense(expense);
@@ -124,7 +128,7 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="splitType" className="text-sm font-medium text-gray-700">Split Type</Label>
-          <Select value={splitType} onValueChange={(value: SplitType) => setSplitType(value)}>
+          <Select value={split_type} onValueChange={(value: SplitType) => setSplitType(value)}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select split type" />
             </SelectTrigger>
