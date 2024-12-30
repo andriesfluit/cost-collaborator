@@ -49,6 +49,15 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
     });
   };
 
+  const getSplitLabel = (splitType: string) => {
+    switch (splitType) {
+      case 'restaurant': return '50/50';
+      case 'no-kids': return '60/40';
+      case 'kids': return '35/65';
+      default: return splitType;
+    }
+  };
+
   return (
     <div className="rounded-xl border bg-white overflow-hidden">
       <ScrollArea className="h-[400px] md:h-[500px]">
@@ -75,6 +84,16 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
                   Category <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </TableHead>
+              <TableHead>
+                <Button variant="ghost" onClick={() => toggleSort('payer')} className="text-xs md:text-sm">
+                  Paid By <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button variant="ghost" onClick={() => toggleSort('splitType')} className="text-xs md:text-sm">
+                  Split <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -84,6 +103,8 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
                 <TableCell className="text-xs md:text-sm font-medium">{formatAmount(expense.amount)}</TableCell>
                 <TableCell className="hidden md:table-cell text-xs md:text-sm">{expense.description}</TableCell>
                 <TableCell className="text-xs md:text-sm">{expense.category}</TableCell>
+                <TableCell className="text-xs md:text-sm">{expense.payer}</TableCell>
+                <TableCell className="text-xs md:text-sm">{getSplitLabel(expense.splitType)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

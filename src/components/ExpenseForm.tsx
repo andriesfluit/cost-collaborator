@@ -11,12 +11,17 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 
+export type SplitType = 'restaurant' | 'no-kids' | 'kids';
+export type Payer = 'A' | 'S';
+
 export type Expense = {
   id: string;
   date: string;
   amount: number;
   description: string;
   category: string;
+  payer: Payer;
+  splitType: SplitType;
 };
 
 type ExpenseFormProps = {
@@ -32,16 +37,29 @@ const categories = [
   "Other"
 ];
 
+const splitTypes = [
+  { value: 'restaurant', label: 'Restaurant (50/50)' },
+  { value: 'no-kids', label: 'No Kids (60/40)' },
+  { value: 'kids', label: 'Kids (35/65)' }
+] as const;
+
+const payers = [
+  { value: 'A', label: 'A' },
+  { value: 'S', label: 'S' }
+] as const;
+
 export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
+  const [payer, setPayer] = useState<Payer | ''>('');
+  const [splitType, setSplitType] = useState<SplitType | ''>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !description || !category) {
+    if (!amount || !description || !category || !payer || !splitType) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -51,13 +69,17 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
       date,
       amount: parseFloat(amount),
       description,
-      category
+      category,
+      payer,
+      splitType
     };
 
     onAddExpense(expense);
     setAmount('');
     setDescription('');
     setCategory('');
+    setPayer('');
+    setSplitType('');
     toast.success("Expense added successfully");
   };
 
@@ -97,16 +119,48 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
           className="w-full"
         />
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <Label htmlFor="category" className="text-sm font-medium text-gray-700">Category</Label>
+          <Select value={category} onValueChange={setCategory}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="payer" className="text-sm font-medium text-gray-700">Paid by</Label>
+          <Select value={payer} onValueChange={setPayer}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select payer" />
+            </SelectTrigger>
+            <SelectContent>
+              {payers.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <div className="space-y-2">
-        <Label htmlFor="category" className="text-sm font-medium text-gray-700">Category</Label>
-        <Select value={category} onValueChange={setCategory}>
+        <Label htmlFor="splitType" className="text-sm font-medium text-gray-700">Split Type</Label>
+        <Select value={splitType} onValueChange={setSplitType}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder="Select split type" />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((cat) => (
-              <SelectItem key={cat} value={cat}>
-                {cat}
+            {splitTypes.map(({ value, label }) => (
+              <SelectItem key={value} value={value}>
+                {label}
               </SelectItem>
             ))}
           </SelectContent>
