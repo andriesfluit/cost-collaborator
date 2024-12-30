@@ -5,7 +5,7 @@ type ExpenseChartProps = {
   expenses: Expense[];
 };
 
-const COLORS = ['#0EA5E9', '#22C55E', '#EAB308', '#EC4899', '#8B5CF6', '#64748B'];
+const COLORS = ['#9b87f5', '#7E69AB', '#D6BCFA', '#E5DEFF', '#D3E4FD', '#F2FCE2'];
 
 export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   const categoryTotals = expenses.reduce((acc, expense) => {
@@ -19,7 +19,7 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   }));
 
   return (
-    <div className="h-[300px] w-full bg-white rounded-lg shadow-sm p-4">
+    <div className="h-[300px] w-full bg-white rounded-xl shadow-sm p-6">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -37,9 +37,9 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
           </Pie>
           <Tooltip 
             formatter={(value: number) => 
-              value.toLocaleString('en-US', {
+              value.toLocaleString('de-DE', {
                 style: 'currency',
-                currency: 'USD'
+                currency: 'EUR'
               })
             }
           />

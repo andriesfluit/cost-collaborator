@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type ExpenseListProps = {
   expenses: Expense[];
@@ -42,50 +43,52 @@ export const ExpenseList = ({ expenses }: ExpenseListProps) => {
   };
 
   const formatAmount = (amount: number) => {
-    return amount.toLocaleString('en-US', {
+    return amount.toLocaleString('de-DE', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'EUR'
     });
   };
 
   return (
-    <div className="rounded-lg border bg-white">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Button variant="ghost" onClick={() => toggleSort('date')}>
-                Date <ArrowUpDown className="ml-2 h-4 w-4" />
-              </Button>
-            </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => toggleSort('amount')}>
-                Amount <ArrowUpDown className="ml-2 h-4 w-4" />
-              </Button>
-            </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => toggleSort('description')}>
-                Description <ArrowUpDown className="ml-2 h-4 w-4" />
-              </Button>
-            </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => toggleSort('category')}>
-                Category <ArrowUpDown className="ml-2 h-4 w-4" />
-              </Button>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedExpenses.map((expense) => (
-            <TableRow key={expense.id}>
-              <TableCell>{formatDate(expense.date)}</TableCell>
-              <TableCell>{formatAmount(expense.amount)}</TableCell>
-              <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.category}</TableCell>
+    <div className="rounded-xl border bg-white overflow-hidden">
+      <ScrollArea className="h-[400px] md:h-[500px]">
+        <Table>
+          <TableHeader className="bg-gray-50 sticky top-0">
+            <TableRow>
+              <TableHead className="w-[100px]">
+                <Button variant="ghost" onClick={() => toggleSort('date')} className="text-xs md:text-sm">
+                  Date <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button variant="ghost" onClick={() => toggleSort('amount')} className="text-xs md:text-sm">
+                  Amount <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              </TableHead>
+              <TableHead className="hidden md:table-cell">
+                <Button variant="ghost" onClick={() => toggleSort('description')} className="text-xs md:text-sm">
+                  Description <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button variant="ghost" onClick={() => toggleSort('category')} className="text-xs md:text-sm">
+                  Category <ArrowUpDown className="ml-1 h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {sortedExpenses.map((expense) => (
+              <TableRow key={expense.id} className="hover:bg-gray-50">
+                <TableCell className="text-xs md:text-sm">{formatDate(expense.date)}</TableCell>
+                <TableCell className="text-xs md:text-sm font-medium">{formatAmount(expense.amount)}</TableCell>
+                <TableCell className="hidden md:table-cell text-xs md:text-sm">{expense.description}</TableCell>
+                <TableCell className="text-xs md:text-sm">{expense.category}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ScrollArea>
     </div>
   );
 };

@@ -62,19 +62,20 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white rounded-lg shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded-xl shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="date">Date</Label>
+          <Label htmlFor="date" className="text-sm font-medium text-gray-700">Date</Label>
           <Input
             id="date"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            className="w-full"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="amount">Amount</Label>
+          <Label htmlFor="amount" className="text-sm font-medium text-gray-700">Amount (€)</Label>
           <Input
             id="amount"
             type="number"
@@ -82,22 +83,24 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
             placeholder="0.00"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
+            className="w-full"
           />
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description" className="text-sm font-medium text-gray-700">Description</Label>
         <Input
           id="description"
           placeholder="Enter expense description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          className="w-full"
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="category">Category</Label>
+        <Label htmlFor="category" className="text-sm font-medium text-gray-700">Category</Label>
         <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
@@ -109,7 +112,9 @@ export const ExpenseForm = ({ onAddExpense }: ExpenseFormProps) => {
           </SelectContent>
         </Select>
       </div>
-      <Button type="submit" className="w-full">Add Expense</Button>
+      <Button type="submit" className="w-full bg-[#9b87f5] hover:bg-[#7E69AB] text-white">
+        Add Expense
+      </Button>
     </form>
   );
 };
