@@ -13,7 +13,7 @@ const Index = () => {
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
 
   return (
-    <div className="min-h-screen bg-[#F1F0FB] py-4 px-4 md:py-8">
+    <div className="min-h-screen bg-[#FAFBFD] py-4 px-4 md:py-8">
       <div className="container mx-auto max-w-6xl">
         <h1 className="text-3xl md:text-4xl font-bold text-[#403E43] mb-6 md:mb-8 text-center">
           Expense Tracker
