@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ExpenseForm, type Expense } from '@/components/ExpenseForm';
+import { ExpenseForm } from '@/components/ExpenseForm';
+import type { Expense } from '@/components/expense-form/types';
 import { ExpenseList } from '@/components/ExpenseList';
 import { ExpenseChart } from '@/components/ExpenseChart';
 import { supabase } from "@/integrations/supabase/client";
@@ -37,13 +38,20 @@ const Index = () => {
     mutationFn: async (expense: Omit<Expense, 'id' | 'created_at' | 'user_id' | 'split_ratio_a' | 'split_ratio_s'>) => {
       const user = await supabase.auth.getUser();
       if (!user.data.user) throw new Error('No user found');
+
+      const newExpense = {
+        ...expense,
+        user_id: user.data.user.id,
+        // Set default values for split ratios based on split_type
+        split_ratio_a: expense.split_type === 'restaurant' ? 0.6 : 
+                      expense.split_type === 'no-kids' ? 0.5 : 0.75,
+        split_ratio_s: expense.split_type === 'restaurant' ? 0.4 : 
+                      expense.split_type === 'no-kids' ? 0.5 : 0.25,
+      };
       
       const { data, error } = await supabase
         .from('expenses')
-        .insert([{
-          ...expense,
-          user_id: user.data.user.id,
-        }])
+        .insert([newExpense])
         .select()
         .single();
 
@@ -52,7 +60,6 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
-      toast.success("Expense added successfully");
     },
     onError: (error) => {
       console.error('Error adding expense:', error);
