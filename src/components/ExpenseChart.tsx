@@ -1,4 +1,4 @@
-import type { Expense } from './ExpenseForm';
+import type { Expense } from './expense-form/types';
 
 type ExpenseChartProps = {
   expenses: Expense[];

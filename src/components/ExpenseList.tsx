@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Expense } from './ExpenseForm';
+import type { Expense } from './expense-form/types';
 import {
   Table,
   TableBody,

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { DateAmountInputs } from "./expense-form/DateAmountInputs";
 import { DescriptionInput } from "./expense-form/DescriptionInput";
 import { PayerSplitInputs } from "./expense-form/PayerSplitInputs";
-import { Expense, Payer, SplitType } from "./expense-form/types";
+import type { Expense, Payer, SplitType } from "./expense-form/types";
 
 type ExpenseFormProps = {
   onAddExpense: (expense: Expense) => void;
