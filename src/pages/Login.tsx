@@ -1,20 +1,11 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if user is already logged in
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        navigate("/");
-      }
-    });
-  }, [navigate]);
+  // Use our new auth hook
+  useAuth("/");
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] py-8 px-4">
@@ -25,7 +16,17 @@ const Login = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <Auth
             supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
+            appearance={{ 
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: '#2563eb',
+                    brandAccent: '#1d4ed8',
+                  },
+                },
+              },
+            }}
             theme="light"
             providers={[]}
           />
