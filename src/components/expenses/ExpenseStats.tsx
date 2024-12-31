@@ -1,4 +1,17 @@
 import { Expense } from '@/components/expense-form/types';
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { useQueryClient } from '@tanstack/react-query';
 
 interface BalanceStats {
   total: number;
@@ -15,6 +28,8 @@ interface ExpenseStatsProps {
 }
 
 export const ExpenseStats = ({ expenses }: ExpenseStatsProps) => {
+  const queryClient = useQueryClient();
+
   const calculateBalance = (): BalanceStats => {
     const totalByPayer = expenses.reduce(
       (acc, expense) => {
@@ -41,6 +56,23 @@ export const ExpenseStats = ({ expenses }: ExpenseStatsProps) => {
       balance: Math.abs(finalBalance),
       whoOwes: finalBalance > 0 ? 'S' : 'A'
     };
+  };
+
+  const handleSettleExpenses = async () => {
+    try {
+      const { error } = await supabase
+        .from('expenses')
+        .delete()
+        .neq('id', ''); // Delete all expenses for the current user (RLS will handle filtering)
+
+      if (error) throw error;
+
+      toast.success("All expenses have been settled and cleared");
+      queryClient.invalidateQueries({ queryKey: ['expenses'] });
+    } catch (error) {
+      console.error('Error settling expenses:', error);
+      toast.error("Failed to settle expenses");
+    }
   };
 
   const balance = calculateBalance();
@@ -85,6 +117,37 @@ export const ExpenseStats = ({ expenses }: ExpenseStatsProps) => {
           </span>
         </div>
       </div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button 
+            variant="outline" 
+            className="w-full mt-4"
+          >
+            Settle Expenses
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Settle Expenses</DialogTitle>
+            <DialogDescription>
+              This will delete all expenses after settlement. The current balance shows that {balance.whoOwes} owes {balance.balance.toLocaleString('de-DE', {
+                style: 'currency',
+                currency: 'EUR'
+              })}. Are you sure you want to proceed?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-4">
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button onClick={handleSettleExpenses}>
+                Confirm Settlement
+              </Button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
